@@ -1,44 +1,126 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Header } from "@/components/Header";
 import { InputSection } from "@/components/InputSection";
+import { GranularLoader } from "@/components/GranularLoader";
+import { FlashcardViewer } from "@/components/FlashcardViewer";
+import { CompletionScreen } from "@/components/CompletionScreen";
+import { useStudyDeck } from "@/hooks/useStudyDeck";
 
 export default function Home() {
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const handleGenerate = (text: string, count: number) => {
-    setIsGenerating(true);
-    // In Phase 1, basic state trigger layout
-    setTimeout(() => {
-      setIsGenerating(false);
-    }, 1500);
-  };
+  const {
+    deck,
+    activeCards,
+    currentIndex,
+    isFlipped,
+    masteryMap,
+    isCompleted,
+    isReTestMode,
+    isLoading,
+    error,
+    generateDeck,
+    cancelGeneration,
+    retryGeneration,
+    flipCard,
+    rateCurrentCard,
+    nextCard,
+    prevCard,
+    reTestMissedCards,
+    reviewAllCards,
+    resetDeck,
+  } = useStudyDeck();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFDFD]">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-[#FCFCFC]">
+      <Header deckActive={!!deck} onReset={resetDeck} />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col items-center">
-        {/* Intro Tagline */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 border border-black bg-amber-400 font-mono text-xs font-bold uppercase mb-4 shadow-brutal-sm">
-            <span>⚡ High-Signal Active Recall</span>
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center">
+        {/* Loading State */}
+        {isLoading && (
+          <GranularLoader onCancel={cancelGeneration} />
+        )}
+
+        {/* Active Flashcard Viewer State */}
+        {!isLoading && deck && !isCompleted && activeCards.length > 0 && (
+          <div className="w-full space-y-6">
+            <div className="text-center">
+              <span className="text-[11px] font-mono font-bold tracking-widest text-neutral-500 uppercase">
+                Active Deck: {deck.topic}
+              </span>
+              <p className="text-xs text-neutral-600 max-w-md mx-auto line-clamp-1 mt-0.5">
+                {deck.summary}
+              </p>
+            </div>
+
+            <FlashcardViewer
+              cards={activeCards}
+              currentIndex={currentIndex}
+              isFlipped={isFlipped}
+              masteryMap={masteryMap}
+              isReTestMode={isReTestMode}
+              onFlip={flipCard}
+              onRateCard={rateCurrentCard}
+              onNext={nextCard}
+              onPrev={prevCard}
+            />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-tight">
-            Turn messy notes into structured study cards.
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-neutral-600 font-sans">
-            Paste raw text, generate validated flashcards, test your memory, and automatically drill your weakest concepts.
-          </p>
-        </div>
+        )}
 
-        {/* Raw Input Layout */}
-        <InputSection
-          onGenerate={handleGenerate}
-          isLoading={isGenerating}
-          onCancel={() => setIsGenerating(false)}
-        />
+        {/* Completion Screen State */}
+        {!isLoading && deck && isCompleted && (
+          <CompletionScreen
+            cards={activeCards}
+            masteryMap={masteryMap}
+            isReTestMode={isReTestMode}
+            onReTestMissed={reTestMissedCards}
+            onReviewAll={reviewAllCards}
+            onNewSession={resetDeck}
+          />
+        )}
+
+        {/* Input Form State (when no deck is loaded and not loading) */}
+        {!isLoading && !deck && (
+          <div className="w-full">
+            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 border border-black bg-amber-400 font-mono text-xs font-bold uppercase mb-4 shadow-brutal-sm">
+                <span>⚡ High-Signal Active Recall</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-tight">
+                Turn messy notes into structured study cards.
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-neutral-600 font-sans">
+                Paste raw notes, generate verified flashcards, test your memory, and automatically drill your weakest concepts.
+              </p>
+            </div>
+
+            {error && (
+              <div className="max-w-3xl mx-auto mb-6 p-4 border-2 border-red-600 bg-red-50 text-red-950 shadow-brutal flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <span className="font-mono text-xs font-bold uppercase tracking-wider block text-red-700">
+                    System Error
+                  </span>
+                  <p className="text-sm font-medium">{error.message}</p>
+                </div>
+                {error.canRetry && (
+                  <button
+                    type="button"
+                    onClick={retryGeneration}
+                    className="px-4 py-2 border-2 border-black bg-black text-white hover:bg-neutral-800 font-mono text-xs font-bold uppercase tracking-wider shadow-brutal-sm active:translate-y-0.5 shrink-0"
+                  >
+                    Retry Generation ↺
+                  </button>
+                )}
+              </div>
+            )}
+
+            <InputSection
+              onGenerate={generateDeck}
+              isLoading={isLoading}
+              onCancel={cancelGeneration}
+            />
+          </div>
+        )}
       </main>
 
       <footer className="w-full border-t-2 border-black bg-white py-4 mt-auto">

@@ -6,6 +6,7 @@ import { InputSection } from "@/components/InputSection";
 import { GranularLoader } from "@/components/GranularLoader";
 import { FlashcardViewer } from "@/components/FlashcardViewer";
 import { CompletionScreen } from "@/components/CompletionScreen";
+import { ErrorBanner } from "@/components/ErrorBanner";
 import { useStudyDeck } from "@/hooks/useStudyDeck";
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
     generateDeck,
     cancelGeneration,
     retryGeneration,
+    dismissError,
     flipCard,
     rateCurrentCard,
     nextCard,
@@ -36,7 +38,7 @@ export default function Home() {
       <Header deckActive={!!deck} onReset={resetDeck} />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center">
-        {/* Loading State */}
+        {/* Loading State with Granular Micro-copy */}
         {isLoading && (
           <GranularLoader onCancel={cancelGeneration} />
         )}
@@ -79,7 +81,7 @@ export default function Home() {
           />
         )}
 
-        {/* Input Form State (when no deck is loaded and not loading) */}
+        {/* Input Form State & Error UI */}
         {!isLoading && !deck && (
           <div className="w-full">
             <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
@@ -90,28 +92,16 @@ export default function Home() {
                 Turn messy notes into structured study cards.
               </h2>
               <p className="mt-3 text-sm sm:text-base text-neutral-600 font-sans">
-                Paste raw notes, generate verified flashcards, test your memory, and automatically drill your weakest concepts.
+                Paste raw notes, generate structured flashcards, test your recall, and automatically drill your missed concepts.
               </p>
             </div>
 
             {error && (
-              <div className="max-w-3xl mx-auto mb-6 p-4 border-2 border-red-600 bg-red-50 text-red-950 shadow-brutal flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div>
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider block text-red-700">
-                    System Error
-                  </span>
-                  <p className="text-sm font-medium">{error.message}</p>
-                </div>
-                {error.canRetry && (
-                  <button
-                    type="button"
-                    onClick={retryGeneration}
-                    className="px-4 py-2 border-2 border-black bg-black text-white hover:bg-neutral-800 font-mono text-xs font-bold uppercase tracking-wider shadow-brutal-sm active:translate-y-0.5 shrink-0"
-                  >
-                    Retry Generation ↺
-                  </button>
-                )}
-              </div>
+              <ErrorBanner
+                error={error}
+                onRetry={retryGeneration}
+                onDismiss={dismissError}
+              />
             )}
 
             <InputSection

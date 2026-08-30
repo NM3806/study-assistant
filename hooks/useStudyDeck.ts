@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { StudyDeck, Flashcard, CardMastery, GenerationError } from "@/lib/types";
+import { extractAndParseJSON, validateAndRepairDeck } from "@/lib/parser";
 
 export function useStudyDeck() {
   const [deck, setDeck] = useState<StudyDeck | null>(null);
@@ -23,7 +24,7 @@ export function useStudyDeck() {
     }
     setIsLoading(false);
     setError({
-      message: "Generation was cancelled.",
+      message: "Generation was cancelled by the user.",
       code: "ABORTED",
       canRetry: true,
     });
@@ -31,7 +32,7 @@ export function useStudyDeck() {
 
   const generateDeck = useCallback(
     async (text: string, count: number = 6) => {
-      // Prevent race conditions by aborting any in-flight request
+      // Abort any active prior request to avoid race conditions
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -54,25 +55,23 @@ export function useStudyDeck() {
 
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.error || `Server responded with status ${response.status}`);
+          const isRateLimit = response.status === 429;
+          throw {
+            message: errData.error || `Server responded with status ${response.status}`,
+            code: isRateLimit ? "RATE_LIMITED" : "API_ERROR",
+          };
         }
 
         const data = await response.json();
 
-        // Check if server returned raw text or structured object
-        const rawContent = data.raw || data;
-        let validatedDeck: StudyDeck;
-
-        if (rawContent && typeof rawContent === "object" && Array.isArray(rawContent.cards)) {
-          validatedDeck = rawContent as StudyDeck;
-        } else {
-          // If raw string or slightly malformed
-          throw new Error("Unable to parse structured flashcards from response.");
+        // Pass through defensive parsing pipeline
+        let rawPayload = data;
+        if (data && typeof data === "object" && "raw" in data) {
+          rawPayload = data.raw;
         }
 
-        if (!validatedDeck.cards || validatedDeck.cards.length === 0) {
-          throw new Error("No flashcards were generated from the provided text.");
-        }
+        const parsed = extractAndParseJSON(rawPayload);
+        const validatedDeck = validateAndRepairDeck(parsed, "Custom Study Set");
 
         setDeck(validatedDeck);
         setActiveCards(validatedDeck.cards);
@@ -83,13 +82,17 @@ export function useStudyDeck() {
         setIsReTestMode(false);
         setError(null);
       } catch (err: unknown) {
-        if ((err as Error)?.name === "AbortError") {
-          return; // Intentionally aborted, do not trigger error state
+        if ((err as Error)?.name === "AbortError" || (err as { name?: string })?.name === "AbortError") {
+          return; // Intentional abort, do not display error banner
         }
-        console.error("Deck generation error:", err);
+
+        const customErr = err as { message?: string; code?: GenerationError["code"]; rawOutput?: string };
+        console.error("Defensive deck generation error:", err);
+
         setError({
-          message: (err as Error)?.message || "An unexpected error occurred while generating flashcards.",
-          code: "API_ERROR",
+          message: customErr.message || "Failed to parse structured flashcards from the response.",
+          code: customErr.code || "MALFORMED_OUTPUT",
+          rawOutput: customErr.rawOutput,
           canRetry: true,
         });
       } finally {
@@ -180,6 +183,10 @@ export function useStudyDeck() {
     setError(null);
   }, []);
 
+  const dismissError = useCallback(() => {
+    setError(null);
+  }, []);
+
   return {
     deck,
     activeCards,
@@ -194,6 +201,7 @@ export function useStudyDeck() {
     generateDeck,
     cancelGeneration,
     retryGeneration,
+    dismissError,
     flipCard,
     rateCurrentCard,
     nextCard,

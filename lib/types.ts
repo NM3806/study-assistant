@@ -14,19 +14,6 @@ export interface StudyDeck {
 
 export type CardMastery = 'unreviewed' | 'mastered' | 'learning';
 
-export interface CardReviewState {
-  cardId: string;
-  status: CardMastery;
-}
-
-export type LoadingStep = 
-  | 'idle'
-  | 'analyzing'
-  | 'generating'
-  | 'validating'
-  | 'completed'
-  | 'error';
-
 export interface GenerationError {
   message: string;
   code?: 'EMPTY_INPUT' | 'API_ERROR' | 'MALFORMED_OUTPUT' | 'ABORTED' | 'RATE_LIMITED' | 'UNKNOWN';

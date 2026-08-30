@@ -2,6 +2,7 @@
 
 A Next.js application that converts study notes into interactive flashcards with confidence ratings and missed-card review.
 
+<img width="1500" height="968" alt="image" src="https://github.com/user-attachments/assets/a955b9e4-86bb-4499-b0ee-719f754aecb4" />
 Built with Next.js (App Router), TypeScript, Tailwind CSS, and Google Gemini API.
 
 ---

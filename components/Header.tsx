@@ -12,11 +12,8 @@ export function Header({ deckActive, onReset }: HeaderProps) {
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 bg-black" />
           <h1 className="font-mono font-bold tracking-tight text-lg sm:text-xl text-black">
-            STUDY // ASSISTANT
+            STUDY ASSISTANT
           </h1>
-          <span className="hidden sm:inline-block text-[11px] font-mono uppercase px-2 py-0.5 border border-black bg-neutral-100">
-            AI Card Engine
-          </span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -28,10 +25,9 @@ export function Header({ deckActive, onReset }: HeaderProps) {
               ← NEW DECK
             </button>
           )}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 border border-black bg-neutral-50 text-[11px] font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-medium">CORE READY</span>
-          </div>
+          <span className="hidden sm:inline-block text-[11px] font-mono uppercase px-2 py-0.5 border border-black bg-neutral-100">
+            AI Card Engine
+          </span>
         </div>
       </div>
     </header>

@@ -37,9 +37,6 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
         {/* Title bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-6 border-b-2 border-black">
           <div>
-            <span className="text-xs font-mono font-bold tracking-wider text-neutral-500 uppercase">
-              Step 01 // Ingestion
-            </span>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-0.5">
               Paste Notes or Topic Excerpt
             </h2>

@@ -48,7 +48,7 @@ export default function Home() {
           <div className="w-full space-y-6">
             <div className="text-center">
               <span className="text-[11px] font-mono font-bold tracking-widest text-neutral-500 uppercase">
-                Active Deck: {deck.topic}
+                Active Deck: {deck.topic}... 
               </span>
               <p className="text-xs text-neutral-600 max-w-md mx-auto line-clamp-1 mt-0.5">
                 {deck.summary}
@@ -86,7 +86,7 @@ export default function Home() {
           <div className="w-full">
             <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 border border-black bg-amber-400 font-mono text-xs font-bold uppercase mb-4 shadow-brutal-sm">
-                <span>⚡ High-Signal Active Recall</span>
+                <span>High-Signal Active Recall</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-tight">
                 Turn messy notes into structured study cards.
@@ -115,8 +115,8 @@ export default function Home() {
 
       <footer className="w-full border-t-2 border-black bg-white py-4 mt-auto">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-neutral-600 gap-2">
-          <span>STUDY ASSISTANT // NEXT.js + GEMINI</span>
-          <span>STARK STRUCTURAL DESIGN</span>
+          <span>STUDY ASSISTANT</span>
+          <span>NM3806©</span>
         </div>
       </footer>
     </div>

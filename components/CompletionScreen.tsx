@@ -97,7 +97,7 @@ export function CompletionScreen({
             onClick={onReTestMissed}
             className="w-full py-3.5 px-4 border-2 border-black bg-amber-400 hover:bg-amber-300 text-black font-mono text-sm font-black uppercase tracking-wider transition-all shadow-brutal shadow-brutal-hover active:translate-y-0.5"
           >
-            ⚡ Re-Test Missed Cards ({missedCards.length}) →
+            🗲 Re-Test Missed Cards ({missedCards.length}) →
           </button>
         )}
 

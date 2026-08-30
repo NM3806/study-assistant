@@ -1,8 +1,8 @@
 import { Flashcard, StudyDeck } from "./types";
 
-/**
- * Defensive JSON extraction & sanitizer
- * Handles markdown fences, surrounding conversational prose, trailing commas, and malformed structures.
+/*
+ Defensive JSON extraction & sanitizer
+ Handles markdown fences, surrounding conversational prose, trailing commas, and malformed structures.
  */
 export function extractAndParseJSON(rawInput: unknown): unknown {
   if (typeof rawInput !== "string") {
@@ -11,19 +11,19 @@ export function extractAndParseJSON(rawInput: unknown): unknown {
 
   let cleaned = rawInput.trim();
 
-  // 1. Strip markdown code block fences (```json ... ``` or ``` ...)
+  // Strip markdown code block fences (```json ... ``` or ``` ...)
   if (cleaned.startsWith("```")) {
     cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
   }
 
-  // 2. Try standard JSON.parse first
+  // Try standard JSON.parse first
   try {
     return JSON.parse(cleaned);
   } catch {
     // Continue to advanced recovery
   }
 
-  // 3. Extract outermost JSON object or array using regex match
+  // Extract outermost JSON object or array using regex match
   const jsonObjectMatch = cleaned.match(/\{[\s\S]*\}/);
   if (jsonObjectMatch) {
     try {
@@ -47,8 +47,8 @@ export function extractAndParseJSON(rawInput: unknown): unknown {
   throw new Error("Could not extract a valid JSON structure from the AI output.");
 }
 
-/**
- * Clean common LLM JSON syntax issues like trailing commas before closing braces/brackets
+/*
+ Clean common LLM JSON syntax issues like trailing commas before closing braces/brackets
  */
 function sanitizeJSONString(jsonStr: string): string {
   return jsonStr
@@ -56,8 +56,8 @@ function sanitizeJSONString(jsonStr: string): string {
     .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Remove invalid control characters
 }
 
-/**
- * Validates and repairs the parsed data into a strict StudyDeck shape
+/*
+ Validates and repairs the parsed data into a strict StudyDeck shape
  */
 export function validateAndRepairDeck(parsed: unknown, defaultTopic: string = "Study Deck"): StudyDeck {
   if (!parsed || typeof parsed !== "object") {

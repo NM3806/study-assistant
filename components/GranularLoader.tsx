@@ -5,10 +5,10 @@ interface GranularLoaderProps {
 }
 
 const LOADING_STEPS = [
-  { text: "Ingesting & chunking source text...", delay: 0 },
-  { text: "Extracting core concepts & active recall pairs...", delay: 1100 },
-  { text: "Synthesizing concise answers & hints...", delay: 2400 },
-  { text: "Validating card schema & structure...", delay: 3800 },
+  { text: "Reading source text...", delay: 0 },
+  { text: "Extracting key concepts...", delay: 1100 },
+  { text: "Generating questions and answers...", delay: 2400 },
+  { text: "Formatting flashcards...", delay: 3800 },
 ];
 
 export function GranularLoader({ onCancel }: GranularLoaderProps) {
@@ -33,14 +33,14 @@ export function GranularLoader({ onCancel }: GranularLoaderProps) {
       </div>
 
       <div className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">
-        Processing Notes // Step {currentStepIndex + 1} of {LOADING_STEPS.length}
+        Generating Cards
       </div>
 
       <h3 className="text-lg sm:text-xl font-black tracking-tight text-black min-h-[3rem] flex items-center justify-center">
         {LOADING_STEPS[currentStepIndex].text}
       </h3>
 
-      {/* Progress Bars */}
+      {/* Progress steps */}
       <div className="grid grid-cols-4 gap-2 my-6">
         {LOADING_STEPS.map((_, index) => (
           <div

@@ -20,7 +20,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Utilitarian Hard Shadow Tokens */
+/* Border shadow styles */
 .shadow-brutal {
   box-shadow: 3px 3px 0px 0px #0a0a0a;
 }
@@ -47,7 +47,7 @@ body {
   box-shadow: 1px 1px 0px 0px #0a0a0a;
 }
 
-/* 3D Flip Card System */
+/* 3D card flip styles */
 .perspective-1000 {
   perspective: 1000px;
 }
@@ -65,7 +65,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Custom scrollbars for clean code/text areas */
+/* Custom scrollbars */
 textarea::-webkit-scrollbar {
   width: 6px;
 }

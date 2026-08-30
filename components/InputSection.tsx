@@ -34,11 +34,11 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
   return (
     <section className="w-full max-w-3xl mx-auto">
       <div className="border-2 border-black bg-white p-6 sm:p-8 shadow-brutal">
-        {/* Title bar */}
+        {/* Title and card count */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-6 border-b-2 border-black">
           <div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-0.5">
-              Paste Notes or Topic Excerpt
+              Paste Notes or Text
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -61,11 +61,11 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
           </div>
         </div>
 
-        {/* Preset chips */}
+        {/* Topic presets */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <label className="text-xs font-mono font-semibold uppercase text-neutral-700">
-              Quick Test Presets:
+              Sample Topics:
             </label>
             {inputText && (
               <button
@@ -103,28 +103,28 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
           </div>
         </div>
 
-        {/* Input Form */}
+        {/* Note input */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
             <textarea
               id="raw-notes-input"
               value={inputText}
               onChange={handleTextChange}
-              placeholder="Paste raw lecture notes, article excerpts, definitions, or bullet points here..."
+              placeholder="Paste lecture notes, articles, definitions, or bullet points here..."
               rows={7}
               disabled={isLoading}
               className="w-full p-4 border-2 border-black font-sans text-sm sm:text-base leading-relaxed bg-[#FAFAFA] focus:bg-white focus:outline-none focus:ring-2 focus:ring-black placeholder:text-neutral-400 resize-y"
             />
             <div className="flex items-center justify-between mt-1.5 px-1 text-xs font-mono text-neutral-500">
               <span>{charCount} characters · {wordCount} words</span>
-              <span>Min ~20 characters</span>
+              <span>Min 10 characters</span>
             </div>
           </div>
 
-          {/* Action Row */}
+          {/* Submit button */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
             <p className="text-xs text-neutral-500 font-mono text-center sm:text-left">
-              Output will be validated into high-signal study cards.
+              Generates question-and-answer study cards.
             </p>
             <div className="flex items-center gap-3 w-full sm:w-auto">
               {isLoading && onCancel && (

@@ -38,17 +38,17 @@ export default function Home() {
       <Header deckActive={!!deck} onReset={resetDeck} />
 
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center">
-        {/* Loading State with Granular Micro-copy */}
+        {/* Loading state */}
         {isLoading && (
           <GranularLoader onCancel={cancelGeneration} />
         )}
 
-        {/* Active Flashcard Viewer State */}
+        {/* Card viewer state */}
         {!isLoading && deck && !isCompleted && activeCards.length > 0 && (
           <div className="w-full space-y-6">
             <div className="text-center">
               <span className="text-[11px] font-mono font-bold tracking-widest text-neutral-500 uppercase">
-                Active Deck: {deck.topic}... 
+                Topic: {deck.topic}
               </span>
               <p className="text-xs text-neutral-600 max-w-md mx-auto line-clamp-1 mt-0.5">
                 {deck.summary}
@@ -69,7 +69,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Completion Screen State */}
+        {/* Completion screen */}
         {!isLoading && deck && isCompleted && (
           <CompletionScreen
             cards={activeCards}
@@ -81,18 +81,18 @@ export default function Home() {
           />
         )}
 
-        {/* Input Form State & Error UI */}
+        {/* Input form */}
         {!isLoading && !deck && (
           <div className="w-full">
             <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 border border-black bg-amber-400 font-mono text-xs font-bold uppercase mb-4 shadow-brutal-sm">
-                <span>High-Signal Active Recall</span>
+                <span>Active Recall</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-tight">
-                Turn messy notes into structured study cards.
+                Turn study notes into interactive flashcards.
               </h2>
               <p className="mt-3 text-sm sm:text-base text-neutral-600 font-sans">
-                Paste raw notes, generate structured flashcards, test your recall, and automatically drill your missed concepts.
+                Paste your notes to generate study cards, test your knowledge, and review missed cards.
               </p>
             </div>
 

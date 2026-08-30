@@ -43,12 +43,12 @@ export function FlashcardViewer({
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center">
-      {/* Top Header & Progress */}
+      {/* Header and progress */}
       <div className="w-full flex items-center justify-between mb-3 text-xs font-mono">
         <div className="flex items-center gap-2">
           {isReTestMode && (
             <span className="px-2 py-0.5 bg-amber-400 border border-black font-bold uppercase text-[10px]">
-              Re-Testing Missed Cards
+              Reviewing Missed Cards
             </span>
           )}
           <span className="font-bold">
@@ -60,7 +60,7 @@ export function FlashcardViewer({
         </div>
       </div>
 
-      {/* Progress Line */}
+      {/* Progress bar */}
       <div className="w-full h-1.5 border border-black bg-neutral-200 mb-6 overflow-hidden">
         <div
           className="h-full bg-black transition-all duration-300 ease-out"
@@ -68,7 +68,7 @@ export function FlashcardViewer({
         />
       </div>
 
-      {/* 3D Flip Card Container */}
+      {/* Flashcard container */}
       <div className="w-full perspective-1000 min-h-[320px] sm:min-h-[360px]">
         <div
           onClick={handleFlipClick}
@@ -76,27 +76,27 @@ export function FlashcardViewer({
             isFlipped ? "rotate-y-180" : ""
           }`}
         >
-          {/* FRONT OF CARD */}
+          {/* Card front */}
           <div className="absolute inset-0 w-full h-full backface-hidden border-2 border-black bg-white p-6 sm:p-8 flex flex-col justify-between shadow-brutal select-none">
-            {/* Front Header */}
+            {/* Category header */}
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono font-bold uppercase px-2 py-0.5 border border-black bg-neutral-100">
                 {card.category || "Concept"}
               </span>
-              <span className="text-[11px] font-mono text-neutral-400">Click to reveal answer ↵</span>
+              <span className="text-[11px] font-mono text-neutral-400">Click to flip</span>
             </div>
 
-            {/* Front Question */}
+            {/* Question */}
             <div className="my-auto py-4 text-center">
               <span className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-widest block mb-2">
-                Prompt / Question
+                Question
               </span>
               <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-black leading-snug">
                 {card.front}
               </h3>
             </div>
 
-            {/* Front Footer: Hint & Flip cue */}
+            {/* Hint and flip button */}
             <div className="flex items-center justify-between pt-4 border-t border-dashed border-neutral-300">
               {card.hint ? (
                 <div>
@@ -109,7 +109,7 @@ export function FlashcardViewer({
                       }}
                       className="text-xs font-mono text-amber-700 hover:text-amber-900 underline font-semibold flex items-center gap-1"
                     >
-                      💡 Need a hint?
+                      Need a hint?
                     </button>
                   ) : (
                     <p className="text-xs font-mono bg-amber-50 border border-amber-300 px-2.5 py-1 text-amber-950">
@@ -129,31 +129,31 @@ export function FlashcardViewer({
                 }}
                 className="text-xs font-mono font-bold px-3 py-1 border border-black bg-neutral-100 hover:bg-neutral-200 transition-colors"
               >
-                FLIP CARD ↵
+                FLIP CARD
               </button>
             </div>
           </div>
 
-          {/* BACK OF CARD */}
+          {/* Card back */}
           <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 border-2 border-black bg-neutral-900 text-white p-6 sm:p-8 flex flex-col justify-between shadow-brutal select-none">
-            {/* Back Header */}
+            {/* Answer header */}
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono font-bold uppercase px-2 py-0.5 border border-white bg-neutral-800 text-amber-400">
-                Answer & Explanation
+                Answer
               </span>
               <span className="text-[11px] font-mono text-neutral-400">Click to flip back</span>
             </div>
 
-            {/* Back Answer */}
+            {/* Answer */}
             <div className="my-auto py-4">
               <p className="text-base sm:text-lg font-medium leading-relaxed text-neutral-100 font-sans">
                 {card.back}
               </p>
             </div>
 
-            {/* Back Footer */}
+            {/* Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-neutral-700 text-xs font-mono text-neutral-400">
-              <span>Mark your recall below</span>
+              <span>Rate your recall below</span>
               <button
                 type="button"
                 onClick={(e) => {
@@ -169,11 +169,11 @@ export function FlashcardViewer({
         </div>
       </div>
 
-      {/* Review Actions */}
+      {/* Rating buttons */}
       <div className="w-full mt-6 space-y-3">
         <div className="text-center">
           <span className="text-xs font-mono font-semibold text-neutral-500 uppercase tracking-wider">
-            How well did you know this?
+            Rate Your Recall
           </span>
         </div>
 
@@ -187,7 +187,7 @@ export function FlashcardViewer({
                 : "bg-white text-black hover:bg-amber-50"
             }`}
           >
-            ✕ Need Review
+            Need Review
           </button>
 
           <button
@@ -199,11 +199,11 @@ export function FlashcardViewer({
                 : "bg-black text-white hover:bg-neutral-800"
             }`}
           >
-            ✓ Got It!
+            Got It
           </button>
         </div>
 
-        {/* Prev / Next controls */}
+        {/* Navigation controls */}
         <div className="flex items-center justify-between pt-2">
           <button
             type="button"

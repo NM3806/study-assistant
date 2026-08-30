@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // Graceful offline/demo fallback if API key is not configured in environment
+    // Fallback mock generation when no API key is set
     if (!apiKey || apiKey === "your_gemini_api_key_here") {
       const mockDeck = generateMockDeck(text, count);
       return NextResponse.json(mockDeck, { status: 200 });
@@ -79,7 +79,7 @@ JSON Schema:
     const prompt = `STUDY NOTES TO CONVERT:\n"""\n${text}\n"""\n\nGenerate exactly ${count} flashcards in valid JSON format.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.6-flash",
       contents: prompt,
       config: {
         systemInstruction,
@@ -101,7 +101,7 @@ JSON Schema:
     try {
       parsedData = JSON.parse(outputText);
     } catch {
-      // Return raw output with 200 so client-side defensive parser can sanitize and extract
+      // Pass raw text to client parser if standard parsing fails
       return NextResponse.json({ raw: outputText }, { status: 200 });
     }
 

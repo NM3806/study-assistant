@@ -26,7 +26,7 @@ export function Header({ deckActive, onReset }: HeaderProps) {
             </button>
           )}
           <span className="hidden sm:inline-block text-[11px] font-mono uppercase px-2 py-0.5 border border-black bg-neutral-100">
-            AI Card Engine
+            Flashcards
           </span>
         </div>
       </div>

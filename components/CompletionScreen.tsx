@@ -26,22 +26,22 @@ export function CompletionScreen({
 
   return (
     <div className="w-full max-w-2xl mx-auto border-2 border-black bg-white p-6 sm:p-8 shadow-brutal">
-      {/* Badge & Title */}
+      {/* Title and status */}
       <div className="text-center pb-6 border-b-2 border-black">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 border border-black bg-neutral-100 font-mono text-xs font-bold uppercase mb-3">
-          {isReTestMode ? "Re-Test Completed" : "Deck Review Complete"}
+          {isReTestMode ? "Re-Test Completed" : "Deck Complete"}
         </div>
         <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-black">
-          {isPerfect ? "🎉 Full Mastery Achieved!" : "Review Session Summary"}
+          {isPerfect ? "100% Mastery Achieved" : "Review Summary"}
         </h2>
         <p className="mt-1 text-sm text-neutral-600 font-sans">
           {isPerfect
-            ? "You scored 100% across all flashcards in this deck."
-            : "Here is your mastery breakdown. Re-test missed concepts to lock them in."}
+            ? "You completed all flashcards in this deck."
+            : "Review missed concepts to reinforce your recall."}
         </p>
       </div>
 
-      {/* Score Grid */}
+      {/* Score summary */}
       <div className="grid grid-cols-3 gap-3 my-6 text-center font-mono">
         <div className="p-3.5 border-2 border-black bg-neutral-50">
           <div className="text-2xl sm:text-3xl font-black text-black">{scorePercent}%</div>
@@ -57,7 +57,7 @@ export function CompletionScreen({
         </div>
       </div>
 
-      {/* Card Breakdown List */}
+      {/* Card breakdown */}
       <div className="space-y-2 mb-8 max-h-56 overflow-y-auto pr-1">
         <h4 className="text-xs font-mono font-bold uppercase text-neutral-500 mb-2">
           Card Breakdown:
@@ -89,7 +89,7 @@ export function CompletionScreen({
         })}
       </div>
 
-      {/* Actions */}
+      {/* Action buttons */}
       <div className="space-y-3 pt-4 border-t-2 border-black">
         {missedCards.length > 0 && (
           <button
@@ -97,7 +97,7 @@ export function CompletionScreen({
             onClick={onReTestMissed}
             className="w-full py-3.5 px-4 border-2 border-black bg-amber-400 hover:bg-amber-300 text-black font-mono text-sm font-black uppercase tracking-wider transition-all shadow-brutal shadow-brutal-hover active:translate-y-0.5"
           >
-            🗲 Re-Test Missed Cards ({missedCards.length}) →
+            Re-Test Missed Cards ({missedCards.length}) →
           </button>
         )}
 
@@ -107,7 +107,7 @@ export function CompletionScreen({
             onClick={onReviewAll}
             className="py-3 px-4 border-2 border-black bg-white hover:bg-neutral-100 text-black font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-brutal-sm active:translate-y-0.5"
           >
-            ↺ Restart All Cards
+            Restart All Cards
           </button>
           <button
             type="button"

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Study Assistant // AI Interactive Flashcards",
-  description: "Convert free-form notes into structured, interactive flashcards with mastery tracking and re-testing.",
+  title: "Study Assistant - AI Flashcards",
+  description: "Convert study notes into interactive flashcards with mastery tracking and re-testing.",
 };
 
 export default function RootLayout({

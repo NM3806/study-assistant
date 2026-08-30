@@ -1,9 +1,6 @@
 import { Flashcard, StudyDeck } from "./types";
 
-/*
- Defensive JSON extraction & sanitizer
- Handles markdown fences, surrounding conversational prose, trailing commas, and malformed structures.
- */
+// Extracts and parses JSON from model output, handling code blocks, brackets, and syntax errors.
 export function extractAndParseJSON(rawInput: unknown): unknown {
   if (typeof rawInput !== "string") {
     return rawInput;
@@ -11,26 +8,26 @@ export function extractAndParseJSON(rawInput: unknown): unknown {
 
   let cleaned = rawInput.trim();
 
-  // Strip markdown code block fences (```json ... ``` or ``` ...)
+  // Strip markdown code blocks
   if (cleaned.startsWith("```")) {
     cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
   }
 
-  // Try standard JSON.parse first
+  // Try standard parse
   try {
     return JSON.parse(cleaned);
   } catch {
-    // Continue to advanced recovery
+    // Continue to fallback extractors
   }
 
-  // Extract outermost JSON object or array using regex match
+  // Match outermost object brackets
   const jsonObjectMatch = cleaned.match(/\{[\s\S]*\}/);
   if (jsonObjectMatch) {
     try {
       const sanitized = sanitizeJSONString(jsonObjectMatch[0]);
       return JSON.parse(sanitized);
     } catch {
-      // Continue to next recovery attempt
+      // Try array match if object parsing fails
     }
   }
 
@@ -40,39 +37,35 @@ export function extractAndParseJSON(rawInput: unknown): unknown {
       const sanitized = sanitizeJSONString(jsonArrayMatch[0]);
       return JSON.parse(sanitized);
     } catch {
-      // Continue
+      // Unrecoverable format
     }
   }
 
   throw new Error("Could not extract a valid JSON structure from the AI output.");
 }
 
-/*
- Clean common LLM JSON syntax issues like trailing commas before closing braces/brackets
- */
+// Removes trailing commas and invalid control characters
 function sanitizeJSONString(jsonStr: string): string {
   return jsonStr
     .replace(/,\s*([\]}])/g, "$1") // Remove trailing commas
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Remove invalid control characters
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Remove control characters
 }
 
-/*
- Validates and repairs the parsed data into a strict StudyDeck shape
- */
+// Validates and formats cards into a StudyDeck object
 export function validateAndRepairDeck(parsed: unknown, defaultTopic: string = "Study Deck"): StudyDeck {
   if (!parsed || typeof parsed !== "object") {
     throw new Error("Invalid response format: Expected a JSON object or array.");
   }
 
   let topic = defaultTopic;
-  let summary = "Custom AI-generated flashcard study set.";
+  let summary = "Custom study flashcard set.";
   let rawCards: unknown[] = [];
 
-  // Case A: Root is array of cards [ { front, back }, ... ]
+  // Handle array input
   if (Array.isArray(parsed)) {
     rawCards = parsed;
   }
-  // Case B: Root is object { cards: [...], topic?: "...", summary?: "..." }
+  // Handle object input
   else {
     const obj = parsed as Record<string, unknown>;
     if (typeof obj.topic === "string" && obj.topic.trim()) {
@@ -94,9 +87,9 @@ export function validateAndRepairDeck(parsed: unknown, defaultTopic: string = "S
     if (!rawCard || typeof rawCard !== "object") return;
     const cardObj = rawCard as Record<string, unknown>;
 
-    // Defensive check for question / front
+    // Resolve front text
     const frontCandidate = cardObj.front || cardObj.question || cardObj.prompt || cardObj.term;
-    // Defensive check for answer / back
+    // Resolve back text
     const backCandidate = cardObj.back || cardObj.answer || cardObj.definition || cardObj.explanation;
 
     if (

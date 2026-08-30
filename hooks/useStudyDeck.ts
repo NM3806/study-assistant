@@ -32,7 +32,7 @@ export function useStudyDeck() {
 
   const generateDeck = useCallback(
     async (text: string, count: number = 6) => {
-      // Abort any active prior request to avoid race conditions
+      // Cancel any pending request
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -64,7 +64,7 @@ export function useStudyDeck() {
 
         const data = await response.json();
 
-        // Pass through defensive parsing pipeline
+        // Extract raw payload if wrapped
         let rawPayload = data;
         if (data && typeof data === "object" && "raw" in data) {
           rawPayload = data.raw;
@@ -83,11 +83,11 @@ export function useStudyDeck() {
         setError(null);
       } catch (err: unknown) {
         if ((err as Error)?.name === "AbortError" || (err as { name?: string })?.name === "AbortError") {
-          return; // Intentional abort, do not display error banner
+          return; // Request was cancelled by user
         }
 
         const customErr = err as { message?: string; code?: GenerationError["code"]; rawOutput?: string };
-        console.error("Defensive deck generation error:", err);
+        console.error("Generation error:", err);
 
         setError({
           message: customErr.message || "Failed to parse structured flashcards from the response.",

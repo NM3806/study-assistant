@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-main: #fcfcfc;
+  --bg-surface: #ffffff;
+  --fg-main: #0a0a0a;
+  --fg-muted: #525252;
+  --border-stark: #0a0a0a;
+  --accent-amber: #f59e0b;
+  --accent-blue: #2563eb;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--fg-main);
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utilitarian Hard Shadow Tokens */
+.shadow-brutal {
+  box-shadow: 3px 3px 0px 0px #0a0a0a;
+}
+
+.shadow-brutal-sm {
+  box-shadow: 2px 2px 0px 0px #0a0a0a;
+}
+
+.shadow-brutal-lg {
+  box-shadow: 5px 5px 0px 0px #0a0a0a;
+}
+
+.shadow-brutal-hover {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.shadow-brutal-hover:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #0a0a0a;
+}
+
+.shadow-brutal-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #0a0a0a;
+}
+
+/* 3D Flip Card System */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Custom scrollbars for clean code/text areas */
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #0a0a0a;
 }

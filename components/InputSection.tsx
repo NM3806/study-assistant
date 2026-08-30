@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useSyncExternalStore } from "react";
 import { PRESET_SAMPLES, PresetSample } from "@/lib/presets";
 
 interface InputSectionProps {
@@ -7,10 +9,19 @@ interface InputSectionProps {
   onCancel?: () => void;
 }
 
+const emptySubscribe = () => () => {};
+
 export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionProps) {
   const [inputText, setInputText] = useState("");
   const [cardCount, setCardCount] = useState<number>(6);
   const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+
+  // Safely check if component is mounted on the client without cascading effect re-renders
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   const handleSelectPreset = (preset: PresetSample) => {
     setInputText(preset.text);
@@ -30,6 +41,7 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
 
   const charCount = inputText.length;
   const wordCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
+  const isSubmitDisabled = !isMounted || charCount < 10 || isLoading;
 
   return (
     <section className="w-full max-w-3xl mx-auto">
@@ -104,7 +116,7 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
         </div>
 
         {/* Note input */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           <div className="relative">
             <textarea
               id="raw-notes-input"
@@ -113,6 +125,7 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
               placeholder="Paste lecture notes, articles, definitions, or bullet points here..."
               rows={7}
               disabled={isLoading}
+              autoComplete="off"
               className="w-full p-4 border-2 border-black font-sans text-sm sm:text-base leading-relaxed bg-[#FAFAFA] focus:bg-white focus:outline-none focus:ring-2 focus:ring-black placeholder:text-neutral-400 resize-y"
             />
             <div className="flex items-center justify-between mt-1.5 px-1 text-xs font-mono text-neutral-500">
@@ -138,7 +151,7 @@ export function InputSection({ onGenerate, isLoading, onCancel }: InputSectionPr
               )}
               <button
                 type="submit"
-                disabled={charCount < 10 || isLoading}
+                disabled={isSubmitDisabled}
                 className="w-full sm:w-auto px-6 py-3 border-2 border-black bg-black text-white hover:bg-neutral-800 disabled:bg-neutral-300 disabled:border-neutral-300 disabled:cursor-not-allowed font-mono text-sm font-bold uppercase tracking-wider transition-all shadow-brutal shadow-brutal-hover active:translate-y-0.5"
               >
                 {isLoading ? "Generating Deck..." : "Generate Flashcards →"}

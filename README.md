@@ -14,7 +14,7 @@ Built with Next.js (App Router), TypeScript, Tailwind CSS, and Google Gemini API
 | **API Route** | [`app/api/generate/route.ts`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/app/api/generate/route.ts) | Server-side Gemini API calls + offline mock fallback |
 | **JSON Parser** | [`lib/parser.ts`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/lib/parser.ts) | Cleans and repairs malformed AI responses |
 | **Deck State** | [`hooks/useStudyDeck.ts`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/hooks/useStudyDeck.ts) | Handles deck progress, abort requests, and re-tests |
-| **Card Viewer** | [`components/FlashcardViewer.tsx`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/components/FlashcardViewer.tsx) | 3D card flip with keyboard shortcuts |
+| **Card Viewer** | [`components/FlashcardViewer.tsx`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/components/FlashcardViewer.tsx) | 3D card flip |
 | **Loading State** | [`components/GranularLoader.tsx`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/components/GranularLoader.tsx) | Step-by-step progress indicator |
 | **Completion Screen** | [`components/CompletionScreen.tsx`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/components/CompletionScreen.tsx) | Score summary and missed-card review button |
 | **Sample Presets** | [`lib/presets.ts`](file:///home/nm3806/.gemini/antigravity-ide/scratch/study-assistant/lib/presets.ts) | Built-in test topics for quick evaluation |
@@ -68,11 +68,6 @@ Handles common LLM formatting issues automatically:
 
 ### 4. Review Flow & UX
 - **Card Flip**: CSS 3D transforms for flipping cards.
-- **Keyboard Shortcuts**:
-  - `Space` / `Enter`: Flip card
-  - `1` / `ArrowLeft`: Need Review
-  - `2` / `ArrowRight`: Got It
-  - `R`: Reset to front
 - **Re-test Missed Cards**: Lets users practice only the cards they marked as "Need Review" until all are mastered.
 
 ---
